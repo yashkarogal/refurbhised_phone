@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Refurbished Phone Selling App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .table-container::-webkit-scrollbar-track {
+            background: #e0e0e0;
+            border-radius: 10px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #a0a0a0;
+            border-radius: 10px;
+        }
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #888;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div id="messageBox" class="fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg hidden z-50"></div>
+
+    <div id="loginSection" class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+        <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Login</h2>
+        <div class="mb-4">
+            <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Username:</label>
+            <input type="text" id="username" value="admin" class="shadow-sm border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" placeholder="enter the username" />
+        </div>
+        <div class="mb-6">
+            <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Password:</label>
+            <input type="password" id="password" value="password123" class="shadow-sm border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200" placeholder="enter password" />
+        </div>
+        <button id="loginButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transform transition duration-300 hover:scale-105">
+            Login
+        </button>
+    </div>
+
+    <div id="mainAppSection" class="hidden bg-white p-8 rounded-xl shadow-2xl w-full lg:w-3/4 max-w-7xl">
+        <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">Refurbished Phone Inventory</h1>
+
+        <div class="mb-10 p-6 bg-gray-50 rounded-lg shadow-inner">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Add New Phone</h2>
+            <form id="addPhoneForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                    <label for="model" class="block text-gray-700 text-sm font-semibold mb-2">Model:</label>
+                    <input type="text" id="model" required class="shadow-sm border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-1 focus:ring-blue-400 transition duration-200" />
+                </div>
+                <div>
+                    <label for="baseCost" class="block text-gray-700 text-sm font-semibold mb-2">Base Cost ($):</label>
+                    <input min="0" type="number" id="baseCost" step="0.01" required class="shadow-sm border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-1 focus:ring-blue-400 transition duration-200" />
+                </div>
+                <div>
+                    <label for="condition" class="block text-gray-700 text-sm font-semibold mb-2">Condition:</label>
+                    <select id="condition" required class="shadow-sm border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-1 focus:ring-blue-400 transition duration-200">
+                        <option value="">Select Condition</option>
+                        <option value="Like New">Like New</option>
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="stock" class="block text-gray-700 text-sm font-semibold mb-2">Stock:</label>
+                    <input min="0" type="number" id="stock" required class="shadow-sm border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-1 focus:ring-blue-400 transition duration-200" />
+                </div>
+                <div class="md:col-span-2 lg:col-span-4 flex justify-end">
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:shadow-outline transform transition duration-300 hover:scale-105">
+                        Add Phone
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-700">Current Inventory & Listings</h2>
+            <div class="overflow-x-auto rounded-lg shadow-md table-container">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Base Cost</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Internal Condition</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sold B2B/Direct</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Platform X (Price / Condition)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Platform Y (Price / Condition)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Platform Z (Price / Condition)</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Listing Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="phoneTableBody" class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="unlistedPhonesSection" class="p-6 bg-yellow-50 border border-yellow-200 rounded-lg shadow-inner">
+            <h2 class="text-2xl font-semibold mb-4 text-yellow-800">Phones Not Listed (Reasons)</h2>
+            <ul id="unlistedPhonesDiv" class="list-disc list-inside text-yellow-700"></ul>
+        </div>
+    </div>
+
+    <script>
+        const loginSection = document.getElementById('loginSection');
+        const mainAppSection = document.getElementById('mainAppSection');
+        const loginButton = document.getElementById('loginButton');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const addPhoneForm = document.getElementById('addPhoneForm');
+        const modelInput = document.getElementById('model');
+        const baseCostInput = document.getElementById('baseCost');
+        const conditionInput = document.getElementById('condition');
+        const stockInput = document.getElementById('stock');
+        const phoneTableBody = document.getElementById('phoneTableBody');
+        const unlistedPhonesDiv = document.getElementById('unlistedPhonesDiv');
+        const unlistedPhonesSection = document.getElementById('unlistedPhonesSection'); 
+        const messageBox = document.getElementById('messageBox');
+
+        const BASE_URL = '';
+
+        function displayMessage(message, isError = false) {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-blue-500', 'bg-red-500');
+            messageBox.classList.add(isError ? 'bg-red-500' : 'bg-blue-500');
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 3000);
+        }
+
+        async function handleLogin() {
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+            try {
+                const response = await fetch(`${BASE_URL}/api/login`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({username, password}),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    displayMessage(data.message);
+                    loginSection.classList.add('hidden');
+                    mainAppSection.classList.remove('hidden');
+                    fetchPhones();
+                } else {
+                    displayMessage(data.error || "Login failed", true);
+                }
+            } catch (error) {
+                console.error("Login error:", error);
+                displayMessage("Network error during login. Is the backend running?", true);
+            }
+        }
+
+        async function fetchPhones() {
+            try {
+                const response = await fetch(`${BASE_URL}/api/phones`);
+                const phones = await response.json();
+                renderPhones(phones);
+            } catch (error) {
+                console.error("Error fetching phones:", error);
+                displayMessage("Failed to load phone inventory. Is the backend running?", true);
+            }
+        }
+
+        function renderPhones(phones) {
+            phoneTableBody.innerHTML = "";
+            unlistedPhonesDiv.innerHTML = "";
+            let hasUnlisted = false;
+
+            phones.forEach(phone => {
+             
+                if (phone.stock > 0) { 
+                    const row = document.createElement("tr");
+                    row.classList.add("hover:bg-gray-50");
+
+                    row.innerHTML = `
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900">${phone.model}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">$${phone.base_cost.toFixed(2)}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">${phone.condition}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">${phone.stock}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">
+                            <span class="${phone.is_sold_b2b_or_direct_flag ? "text-red-600 font-semibold" : "text-green-600"}">
+                                ${phone.is_sold_b2b_or_direct_flag ? "Yes" : "No"}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">
+                            ${phone.platform_listings.PlatformX.selling_price !== null ? "$" + phone.platform_listings.PlatformX.selling_price.toFixed(2) : "N/A"} / ${phone.platform_listings.PlatformX.mapped_condition}
+                            ${!phone.platform_listings.PlatformX.can_list ? '<span class="text-red-500 text-xs ml-1">(Unprofitable)</span>' : ""}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">
+                            ${phone.platform_listings.PlatformY.selling_price !== null ? "$" + phone.platform_listings.PlatformY.selling_price.toFixed(2) : "N/A"} / ${phone.platform_listings.PlatformY.mapped_condition}
+                            ${!phone.platform_listings.PlatformY.can_list ? '<span class="text-red-500 text-xs ml-1">(Unprofitable)</span>' : ""}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">
+                            ${phone.platform_listings.PlatformZ.selling_price !== null ? "$" + phone.platform_listings.PlatformZ.selling_price.toFixed(2) : "N/A"} / ${phone.platform_listings.PlatformZ.mapped_condition}
+                            ${!phone.platform_listings.PlatformZ.can_list ? '<span class="text-red-500 text-xs ml-1">(Unprofitable)</span>' : ""}
+                        </td>
+                        <td class="px-6 py-4 text-sm">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${phone.is_listed ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}">
+                                ${phone.is_listed ? "Listed" : "Not Listed"}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right text-sm font-medium">
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded-lg text-xs transform transition duration-200 hover:scale-105 mr-2" onclick="updatePhoneStatus('${phone.id}', 'stock', ${phone.stock - 1})" ${phone.stock === 0 ? "disabled" : ""}>Sell One</button>
+                            <button class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-1 px-3 rounded-lg text-xs transform transition duration-200 hover:scale-105" onclick="updatePhoneStatus('${phone.id}', 'sold_b2b_or_direct', ${!phone.is_sold_b2b_or_direct_flag})">Toggle B2B Sale</button>
+                        </td>
+                    `;
+                    phoneTableBody.appendChild(row);
+                }
+
+              
+                if (!phone.is_listed) {
+                    hasUnlisted = true;
+                    const li = document.createElement("li");
+                    li.classList.add("mb-1");
+                    li.innerHTML = `<strong>${phone.model}</strong> (Stock: ${phone.stock}, Condition: ${phone.condition}) - Reason(s): ${phone.not_listed_reasons.join(", ")}`;
+                    unlistedPhonesDiv.appendChild(li);
+                }
+            });
+
+            if (hasUnlisted) {
+                unlistedPhonesSection.classList.remove("hidden");
+            } else {
+                unlistedPhonesSection.classList.add("hidden");
+            }
+
+            if (!hasUnlisted) {
+                const li = document.createElement("li");
+                li.textContent = "All applicable phones are listed or have no specific unlisting reasons.";
+                unlistedPhonesDiv.appendChild(li);
+            }
+        }
+
+
+        addPhoneForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const newPhone = {
+                model: modelInput.value,
+                base_cost: parseFloat(baseCostInput.value),
+                condition: conditionInput.value,
+                stock: Number(stockInput.value)
+            };
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/phones`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(newPhone),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    displayMessage(data.message);
+                    addPhoneForm.reset();
+                    fetchPhones();
+                } else {
+                    displayMessage(data.error || "Failed to add phone", true);
+                }
+            } catch (error) {
+                console.error("Error adding phone:", error);
+                displayMessage("Network error. Failed to add phone.", true);
+            }
+        });
+
+        async function updatePhoneStatus(phoneId, type, value) {
+            const updateData = {};
+            updateData[type] = value;
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/phones/${phoneId}`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(updateData),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    displayMessage(data.message);
+                    fetchPhones();
+                } else {
+                    displayMessage(data.error || "Failed to update phone", true);
+                }
+            } catch (error) {
+                console.error("Error updating phone:", error);
+                displayMessage("Network error. Failed to update phone.", true);
+            }
+        }
+
+        window.updatePhoneStatus = updatePhoneStatus;
+
+        loginButton.addEventListener("click", handleLogin);
+        passwordInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                handleLogin();
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loginSection.classList.remove("hidden");
+            mainAppSection.classList.add("hidden");
+        });
+    </script>
+</body>
+</html>
